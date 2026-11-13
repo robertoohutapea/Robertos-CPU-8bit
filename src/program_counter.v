@@ -1,2 +1,23 @@
-// New Verilog file
 
+module program_counter (
+    input wire clk,
+    input wire reset,
+    input wire enable,
+    input wire load,
+    input wire [7:0] load_addr,
+    output reg [7:0] pc
+);
+
+    always @(posedge clk) begin
+        if (reset) begin
+            pc &lt;= 8'b00000000;
+        end
+        else if (load) begin
+            pc &lt;= load_addr;
+        end
+        else if (enable) begin
+            pc &lt;= pc + 1'b1;
+        end
+    end
+
+endmodule
