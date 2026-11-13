@@ -10,13 +10,13 @@ module program_counter (
 
     always @(posedge clk) begin
         if (reset) begin
-            pc &lt;= 8'b00000000;
+            pc = 8'b00000000;
         end
         else if (load) begin
-            pc &lt;= load_addr;
+            pc = load_addr;
         end
         else if (enable) begin
-            pc &lt;= pc + 1'b1;
+            pc = pc + 1'b1;
         end
     end
 
