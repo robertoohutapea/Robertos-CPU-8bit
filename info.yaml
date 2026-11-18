@@ -1,6 +1,4 @@
 
-# Tiny Tapeout project information
-
 project:
   title: "Roberto's CPU 8-bit"
   author: "Roberto Hutapea"
@@ -8,7 +6,6 @@ project:
   description: "Single-cycle 8-bit CPU with 16-bit instruction architecture."
   language: "Verilog"
   clock_hz: 0
-
   tiles: "1x1"
 
   top_module: "tt_um_robertoohutapea_cpu8"
@@ -34,14 +31,14 @@ pinout:
   ui[6]: ""
   ui[7]: ""
 
-  uo[0]: "Program Counter bit 0"
-  uo[1]: "Program Counter bit 1"
-  uo[2]: "Program Counter bit 2"
-  uo[3]: "Program Counter bit 3"
-  uo[4]: "Program Counter bit 4"
-  uo[5]: "Program Counter bit 5"
-  uo[6]: "Program Counter bit 6"
-  uo[7]: "Program Counter bit 7"
+  uo[0]: "PC bit 0"
+  uo[1]: "PC bit 1"
+  uo[2]: "PC bit 2"
+  uo[3]: "PC bit 3"
+  uo[4]: "PC bit 4"
+  uo[5]: "PC bit 5"
+  uo[6]: "PC bit 6"
+  uo[7]: "PC bit 7"
 
   uio[0]: "CPU HALTED"
   uio[1]: ""
