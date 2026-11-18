@@ -1,5 +1,3 @@
-// New Verilog file
-
 
 module alu_8bit (
     input wire [7:0] A,
@@ -9,18 +7,30 @@ module alu_8bit (
     output wire zero
 );
 
-always @(*) begin
-    case (opcode)
-        3'b000: result = A + B;  // ADD
-        3'b001: result = A - B;  // SUB
-        3'b010: result = A & B;  // AND
-        3'b011: result = A | B;  // OR
-        3'b100: result = A ^ B;  // XOR
-        3'b101: result = ~A;     // NOT
-        default: result = 8'b00000000;
-    endcase
-end
+    always @(*) begin
+        case (opcode)
 
-assign zero = (result == 8'b00000000);
+            // Arithmetic Operations
+            3'b000: result = A + B; 
+
+            3'b001: result = A - B;
+
+            // Logical Operations
+            3'b010: result = A & B;
+
+            3'b011: result = A | B;
+
+            3'b100: result = A ^ B;
+
+            3'b101: result = ~A;
+
+            // Undefined Opcode
+            default: result = 8'd0;
+
+        endcase
+    end
+
+    // Zero Flag
+    assign zero = (result == 8'd0);
 
 endmodule
