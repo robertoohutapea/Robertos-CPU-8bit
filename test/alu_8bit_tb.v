@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 
 module alu_8bit_tb;
@@ -25,15 +24,17 @@ module alu_8bit_tb;
         input [7:0] expected;
         input expected_zero;
         input [200*8:1] test_name;
-
         begin
             total_tests = total_tests + 1;
 
-            if (result !== expected || zero !== expected_zero) begin
+            if (result !== expected ||
+                zero !== expected_zero) begin
+
                 $display(
                     "FAIL: %0s | Expected=%0d Actual=%0d Zero=%b",
                     test_name, expected, result, zero
                 );
+
                 errors = errors + 1;
             end
             else begin
