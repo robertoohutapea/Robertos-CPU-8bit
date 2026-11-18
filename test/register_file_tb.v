@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 
 module register_file_tb;
@@ -19,7 +18,6 @@ module register_file_tb;
     integer errors;
     integer total_tests;
 
-    // Instantiate Register File
     register_file uut (
         .clk(clk),
         .reset(reset),
@@ -32,7 +30,7 @@ module register_file_tb;
         .read_data_b(read_data_b)
     );
 
-    // Clock generator: 10 ns period
+    // Clock generator
     initial clk = 0;
     always #5 clk = ~clk;
 
@@ -41,7 +39,6 @@ module register_file_tb;
         errors = 0;
         total_tests = 0;
 
-        // INITIAL CONDITIONS
         reset = 1;
         write_enable = 0;
         write_addr = 0;
@@ -94,64 +91,59 @@ module register_file_tb;
         // TEST 2: READ R0
         read_addr_a = 0;
         #1;
-
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd10) begin
-            $display("FAIL: R0 | Expected=10 Actual=%0d", read_data_a);
+            $display("FAIL: R0 | Expected=10 Actual=%0d",
+                     read_data_a);
             errors = errors + 1;
         end
-        else begin
+        else
             $display("PASS: R0 = %0d", read_data_a);
-        end
 
         // TEST 3: READ R1
         read_addr_a = 1;
         #1;
-
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd5) begin
-            $display("FAIL: R1 | Expected=5 Actual=%0d", read_data_a);
+            $display("FAIL: R1 | Expected=5 Actual=%0d",
+                     read_data_a);
             errors = errors + 1;
         end
-        else begin
+        else
             $display("PASS: R1 = %0d", read_data_a);
-        end
 
         // TEST 4: READ R2
         read_addr_a = 2;
         #1;
-
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd165) begin
-            $display("FAIL: R2 | Expected=165 Actual=%0d", read_data_a);
+            $display("FAIL: R2 | Expected=165 Actual=%0d",
+                     read_data_a);
             errors = errors + 1;
         end
-        else begin
+        else
             $display("PASS: R2 = %0d", read_data_a);
-        end
 
         // TEST 5: READ R3
         read_addr_a = 3;
         #1;
-
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd255) begin
-            $display("FAIL: R3 | Expected=255 Actual=%0d", read_data_a);
+            $display("FAIL: R3 | Expected=255 Actual=%0d",
+                     read_data_a);
             errors = errors + 1;
         end
-        else begin
+        else
             $display("PASS: R3 = %0d", read_data_a);
-        end
 
         // TEST 6: DUAL READ
         read_addr_a = 0;
         read_addr_b = 3;
         #1;
-
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd10 ||
@@ -159,36 +151,31 @@ module register_file_tb;
             $display("FAIL: DUAL READ");
             errors = errors + 1;
         end
-        else begin
+        else
             $display("PASS: DUAL READ");
-        end
 
         // TEST 7: WRITE PROTECTION
         write_enable = 0;
         write_addr = 0;
         write_data = 8'd99;
-
         #10;
 
         read_addr_a = 0;
         #1;
-
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd10) begin
-            $display("FAIL: WRITE PROTECTION | Expected=10 Actual=%0d",
-                     read_data_a);
+            $display("FAIL: WRITE PROTECTION");
             errors = errors + 1;
         end
-        else begin
+        else
             $display("PASS: WRITE PROTECTION");
-        end
 
-        // FINAL TEST REPORT
+        // FINAL REPORT
         $display("--------------------------------");
         $display("REGISTER FILE TEST REPORT");
         $display("Total Tests  : %0d", total_tests);
-        $display("Passed Tests : %0d", total_tests - errors);
+        $display("Passed Tests : %0d", total_tests-errors);
         $display("Failed Tests : %0d", errors);
         $display("--------------------------------");
 
