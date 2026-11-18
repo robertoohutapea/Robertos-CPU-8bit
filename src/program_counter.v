@@ -9,15 +9,25 @@ module program_counter (
 );
 
     always @(posedge clk) begin
+
+        // Priority 1: RESET
         if (reset) begin
-            pc = 8'b00000000;
+            pc <= 8'd0;
         end
+
+        // Priority 2: LOAD
         else if (load) begin
-            pc = load_addr;
+            pc <= load_addr;
         end
+
+        // Priority 3: INCREMENT
         else if (enable) begin
-            pc = pc + 1'b1;
+            pc <= pc + 8'd1;
         end
+
+        // Priority 4: HOLD
+        // No assignment means PC retains its value
+
     end
 
 endmodule
