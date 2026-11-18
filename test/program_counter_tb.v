@@ -3,20 +3,17 @@
 
 module program_counter_tb;
 
-    // Input signals
     reg clk;
     reg reset;
     reg enable;
     reg load;
     reg [7:0] load_addr;
 
-    // Output signal
     wire [7:0] pc;
 
-    // Error counter
     integer errors;
+    integer total_tests;
 
-    // Instantiate Program Counter
     program_counter uut (
         .clk(clk),
         .reset(reset),
@@ -26,98 +23,131 @@ module program_counter_tb;
         .pc(pc)
     );
 
-    // Clock generator: 10 ns period
+    // Clock generator
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // Main test sequence
+    // Check task
+    task check_pc;
+        input [7:0] expected;
+        input [200*8:1] test_name;
+        begin
+            total_tests = total_tests + 1;
+
+            if (pc !== expected) begin
+                $display("FAIL: %0s | Expected=%0d Actual=%0d",
+                         test_name, expected, pc);
+                errors = errors + 1;
+            end
+            else begin
+                $display("PASS: %0s | PC=%0d",
+                         test_name, pc);
+            end
+        end
+    endtask
+
     initial begin
 
         errors = 0;
+        total_tests = 0;
 
-        // Initial conditions
         reset = 1;
         enable = 0;
         load = 0;
-        load_addr = 8'd0;
+        load_addr = 0;
 
         // TEST 1: RESET
-        #12;
-        if (pc !== 8'd0) begin
-            $display("FAIL: RESET | Expected=0, Actual=%0d", pc);
-            errors = errors + 1;
-        end
-        else begin
-            $display("PASS: RESET");
-        end
+        @(posedge clk);
+        #1;
+        check_pc(8'd0, "RESET");
 
         // TEST 2: INCREMENT 1
+        @(negedge clk);
         reset = 0;
         enable = 1;
 
-        #10;
-        if (pc !== 8'd1) begin
-            $display("FAIL: INCREMENT 1 | Expected=1, Actual=%0d", pc);
-            errors = errors + 1;
-        end
-        else begin
-            $display("PASS: INCREMENT 1");
-        end
+        @(posedge clk);
+        #1;
+        check_pc(8'd1, "INCREMENT 1");
 
         // TEST 3: INCREMENT 2
-        #10;
-        if (pc !== 8'd2) begin
-            $display("FAIL: INCREMENT 2 | Expected=2, Actual=%0d", pc);
-            errors = errors + 1;
-        end
-        else begin
-            $display("PASS: INCREMENT 2");
-        end
+        @(posedge clk);
+        #1;
+        check_pc(8'd2, "INCREMENT 2");
 
         // TEST 4: HOLD
+        @(negedge clk);
         enable = 0;
 
-        #10;
-        if (pc !== 8'd2) begin
-            $display("FAIL: HOLD | Expected=2, Actual=%0d", pc);
-            errors = errors + 1;
-        end
-        else begin
-            $display("PASS: HOLD");
-        end
+        @(posedge clk);
+        #1;
+        check_pc(8'd2, "HOLD");
 
         // TEST 5: LOAD
+        @(negedge clk);
         load = 1;
         load_addr = 8'd20;
 
-        #10;
-        if (pc !== 8'd20) begin
-            $display("FAIL: LOAD | Expected=20, Actual=%0d", pc);
-            errors = errors + 1;
-        end
-        else begin
-            $display("PASS: LOAD");
-        end
+        @(posedge clk);
+        #1;
+        check_pc(8'd20, "LOAD");
 
         // TEST 6: INCREMENT AFTER LOAD
+        @(negedge clk);
         load = 0;
         enable = 1;
 
-        #10;
-        if (pc !== 8'd21) begin
-            $display("FAIL: INCREMENT AFTER LOAD | Expected=21, Actual=%0d", pc);
-            errors = errors + 1;
-        end
-        else begin
-            $display("PASS: INCREMENT AFTER LOAD");
-        end
+        @(posedge clk);
+        #1;
+        check_pc(8'd21, "INCREMENT AFTER LOAD");
 
-        // FINAL TEST REPORT
+        // TEST 7: LOAD PRIORITY OVER ENABLE
+        @(negedge clk);
+        load = 1;
+        enable = 1;
+        load_addr = 8'd64;
+
+        @(posedge clk);
+        #1;
+        check_pc(8'd64, "LOAD PRIORITY");
+
+        // TEST 8: RESET PRIORITY OVER LOAD
+        @(negedge clk);
+        reset = 1;
+        load = 1;
+        enable = 1;
+        load_addr = 8'd100;
+
+        @(posedge clk);
+        #1;
+        check_pc(8'd0, "RESET PRIORITY");
+
+        // TEST 9: LOAD MAXIMUM VALUE
+        @(negedge clk);
+        reset = 0;
+        load = 1;
+        enable = 0;
+        load_addr = 8'd255;
+
+        @(posedge clk);
+        #1;
+        check_pc(8'd255, "LOAD 255");
+
+        // TEST 10: OVERFLOW
+        @(negedge clk);
+        load = 0;
+        enable = 1;
+
+        @(posedge clk);
+        #1;
+        check_pc(8'd0, "OVERFLOW 255 TO 0");
+
+        // FINAL REPORT
         $display("--------------------------------");
         $display("PROGRAM COUNTER TEST REPORT");
-        $display("Total Tests : 6");
-        $display("Failed Tests: %0d", errors);
-        $display("Passed Tests: %0d", 6 - errors);
+        $display("Total Tests  : %0d", total_tests);
+        $display("Passed Tests : %0d", total_tests-errors);
+        $display("Failed Tests : %0d", errors);
         $display("--------------------------------");
 
         if (errors == 0)
@@ -125,9 +155,8 @@ module program_counter_tb;
         else
             $display("TEST FAILED");
 
-        $display("PROGRAM COUNTER TEST COMPLETED");
-
         $finish;
+
     end
 
 endmodule
