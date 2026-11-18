@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 
 module register_file (
     input wire clk,
@@ -14,7 +15,6 @@ module register_file (
     output wire [7:0] read_data_b
 );
 
-    // Four 8-bit registers
     reg [7:0] R0;
     reg [7:0] R1;
     reg [7:0] R2;
