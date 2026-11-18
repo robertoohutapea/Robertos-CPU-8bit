@@ -1,4 +1,3 @@
-
 `timescale 1ns/1ps
 
 module program_counter_tb;
@@ -23,11 +22,9 @@ module program_counter_tb;
         .pc(pc)
     );
 
-    // Clock generator
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // Check task
     task check_pc;
         input [7:0] expected;
         input [200*8:1] test_name;
@@ -35,13 +32,17 @@ module program_counter_tb;
             total_tests = total_tests + 1;
 
             if (pc !== expected) begin
-                $display("FAIL: %0s | Expected=%0d Actual=%0d",
-                         test_name, expected, pc);
+                $display(
+                    "FAIL: %0s | Expected=%0d Actual=%0d",
+                    test_name, expected, pc
+                );
                 errors = errors + 1;
             end
             else begin
-                $display("PASS: %0s | PC=%0d",
-                         test_name, pc);
+                $display(
+                    "PASS: %0s | PC=%0d",
+                    test_name, pc
+                );
             end
         end
     endtask
