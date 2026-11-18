@@ -19,6 +19,7 @@ module register_file_tb;
     integer errors;
     integer total_tests;
 
+    // Instantiate Register File
     register_file uut (
         .clk(clk),
         .reset(reset),
@@ -40,6 +41,7 @@ module register_file_tb;
         errors = 0;
         total_tests = 0;
 
+        // INITIAL CONDITIONS
         reset = 1;
         write_enable = 0;
         write_addr = 0;
@@ -56,6 +58,7 @@ module register_file_tb;
         #1;
 
         total_tests = total_tests + 1;
+
         if (read_data_a !== 8'd0 ||
             read_data_b !== 8'd0) begin
             $display("FAIL: RESET");
@@ -91,6 +94,7 @@ module register_file_tb;
         // TEST 2: READ R0
         read_addr_a = 0;
         #1;
+
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd10) begin
@@ -104,6 +108,7 @@ module register_file_tb;
         // TEST 3: READ R1
         read_addr_a = 1;
         #1;
+
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd5) begin
@@ -117,6 +122,7 @@ module register_file_tb;
         // TEST 4: READ R2
         read_addr_a = 2;
         #1;
+
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd165) begin
@@ -130,6 +136,7 @@ module register_file_tb;
         // TEST 5: READ R3
         read_addr_a = 3;
         #1;
+
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd255) begin
@@ -144,6 +151,7 @@ module register_file_tb;
         read_addr_a = 0;
         read_addr_b = 3;
         #1;
+
         total_tests = total_tests + 1;
 
         if (read_data_a !== 8'd10 ||
@@ -155,7 +163,28 @@ module register_file_tb;
             $display("PASS: DUAL READ");
         end
 
-        // FINAL REPORT
+        // TEST 7: WRITE PROTECTION
+        write_enable = 0;
+        write_addr = 0;
+        write_data = 8'd99;
+
+        #10;
+
+        read_addr_a = 0;
+        #1;
+
+        total_tests = total_tests + 1;
+
+        if (read_data_a !== 8'd10) begin
+            $display("FAIL: WRITE PROTECTION | Expected=10 Actual=%0d",
+                     read_data_a);
+            errors = errors + 1;
+        end
+        else begin
+            $display("PASS: WRITE PROTECTION");
+        end
+
+        // FINAL TEST REPORT
         $display("--------------------------------");
         $display("REGISTER FILE TEST REPORT");
         $display("Total Tests  : %0d", total_tests);
@@ -169,6 +198,7 @@ module register_file_tb;
             $display("TEST FAILED");
 
         $finish;
+
     end
 
 endmodule
