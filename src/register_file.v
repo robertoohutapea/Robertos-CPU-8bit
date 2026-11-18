@@ -19,13 +19,13 @@ module register_file (
     // Synchronous reset and write
     always @(posedge clk) begin
         if (reset) begin
-            registers[0] = 8'b00000000;
-            registers[1] = 8'b00000000;
-            registers[2] = 8'b00000000;
-            registers[3] = 8'b00000000;
+            registers[0] &lt;= 8'd0;
+            registers[1] &lt;= 8'd0;
+            registers[2] &lt;= 8'd0;
+            registers[3] &lt;= 8'd0;
         end
         else if (write_enable) begin
-            registers[write_addr] = write_data;
+            registers[write_addr] &lt;= write_data;
         end
     end
 
