@@ -1,3 +1,4 @@
+
 `timescale 1ns/1ps
 
 module cpu_8bit_tb;
@@ -11,6 +12,7 @@ module cpu_8bit_tb;
     integer errors;
     integer total_tests;
 
+    // CPU instantiation
     cpu_8bit uut (
         .clk(clk),
         .reset(reset),
@@ -18,15 +20,22 @@ module cpu_8bit_tb;
         .pc(pc)
     );
 
+    // Clock generator: 10 ns period
     initial clk = 0;
     always #5 clk = ~clk;
 
+    // VCD waveform generation
+    initial begin
+        $dumpfile("cpu_8bit.vcd");
+        $dumpvars(0, cpu_8bit_tb);
+    end
+
+    // Test result checker
     task check_value;
         input [7:0] actual;
         input [7:0] expected;
         input [200*8:1] test_name;
         begin
-
             total_tests = total_tests + 1;
 
             if (actual !== expected) begin
@@ -42,7 +51,6 @@ module cpu_8bit_tb;
                     test_name, actual
                 );
             end
-
         end
     endtask
 
