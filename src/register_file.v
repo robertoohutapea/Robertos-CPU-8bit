@@ -14,23 +14,40 @@ module register_file (
     output wire [7:0] read_data_b
 );
 
-    reg [7:0] registers [0:3];
+    // Four 8-bit registers
+    reg [7:0] R0;
+    reg [7:0] R1;
+    reg [7:0] R2;
+    reg [7:0] R3;
 
     // Synchronous reset and write
     always @(posedge clk) begin
         if (reset) begin
-            registers[0] &lt;= 8'd0;
-            registers[1] &lt;= 8'd0;
-            registers[2] &lt;= 8'd0;
-            registers[3] &lt;= 8'd0;
+            R0 &lt;= 8'd0;
+            R1 &lt;= 8'd0;
+            R2 &lt;= 8'd0;
+            R3 &lt;= 8'd0;
         end
         else if (write_enable) begin
-            registers[write_addr] &lt;= write_data;
+            case (write_addr)
+                2'b00: R0 &lt;= write_data;
+                2'b01: R1 &lt;= write_data;
+                2'b10: R2 &lt;= write_data;
+                2'b11: R3 &lt;= write_data;
+            endcase
         end
     end
 
-    // Asynchronous read
-    assign read_data_a = registers[read_addr_a];
-    assign read_data_b = registers[read_addr_b];
+    // Asynchronous read port A
+    assign read_data_a =
+        (read_addr_a == 2'b00) ? R0 :
+        (read_addr_a == 2'b01) ? R1 :
+        (read_addr_a == 2'b10) ? R2 : R3;
+
+    // Asynchronous read port B
+    assign read_data_b =
+        (read_addr_b == 2'b00) ? R0 :
+        (read_addr_b == 2'b01) ? R1 :
+        (read_addr_b == 2'b10) ? R2 : R3;
 
 endmodule
