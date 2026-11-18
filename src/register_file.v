@@ -23,17 +23,17 @@ module register_file (
     // Synchronous reset and write
     always @(posedge clk) begin
         if (reset) begin
-            R0 &lt;= 8'd0;
-            R1 &lt;= 8'd0;
-            R2 &lt;= 8'd0;
-            R3 &lt;= 8'd0;
+            R0 <= 8'd0;
+            R1 <= 8'd0;
+            R2 <= 8'd0;
+            R3 <= 8'd0;
         end
         else if (write_enable) begin
             case (write_addr)
-                2'b00: R0 &lt;= write_data;
-                2'b01: R1 &lt;= write_data;
-                2'b10: R2 &lt;= write_data;
-                2'b11: R3 &lt;= write_data;
+                2'b00: R0 <= write_data;
+                2'b01: R1 <= write_data;
+                2'b10: R2 <= write_data;
+                2'b11: R3 <= write_data;
             endcase
         end
     end
