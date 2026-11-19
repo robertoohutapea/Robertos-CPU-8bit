@@ -1,3 +1,4 @@
+
 `ifdef __ICARUS__
 `timescale 1ns/1ps
 
@@ -5,6 +6,7 @@ module cpu_8bit_tb;
 
     reg clk;
     reg reset;
+    reg enable;
 
     wire halted;
     wire [7:0] pc;
@@ -12,25 +14,22 @@ module cpu_8bit_tb;
     integer errors;
     integer total_tests;
 
-    // CPU instantiation
     cpu_8bit uut (
         .clk(clk),
         .reset(reset),
+        .enable(enable),
         .halted(halted),
         .pc(pc)
     );
 
-    // Clock generator: 10 ns period
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // VCD waveform generation
     initial begin
         $dumpfile("cpu_8bit.vcd");
         $dumpvars(0, cpu_8bit_tb);
     end
 
-    // Test result checker
     task check_value;
         input [7:0] actual;
         input [7:0] expected;
@@ -60,55 +59,67 @@ module cpu_8bit_tb;
         total_tests = 0;
 
         reset = 1;
+        enable = 0;
 
         // Apply synchronous reset
         @(posedge clk);
         #1;
         reset = 0;
 
-        // Execute demo program
+        // TEST 1: ENABLE HOLD
+        enable = 0;
+
+        @(posedge clk);
+        #1;
+        check_value(pc, 8'd0, "ENABLE HOLD");
+
+        // Enable CPU execution
+        @(negedge clk);
+        enable = 1;
+
+        // Execute demonstration program
         repeat (8) begin
             @(posedge clk);
         end
 
         #1;
 
-        // TEST 1: R0 = 10
+        // TEST 2: LDI R0 = 10
         check_value(
             uut.regfile_inst.R0,
             8'd10,
             "CPU LDI R0"
         );
 
-        // TEST 2: R1 = 5
+        // TEST 3: LDI R1 = 5
         check_value(
             uut.regfile_inst.R1,
             8'd5,
             "CPU LDI R1"
         );
 
-        // TEST 3: R2 = 15
+        // TEST 4: ADD R2 = 15
         check_value(
             uut.regfile_inst.R2,
             8'd15,
             "CPU ADD"
         );
 
-        // TEST 4: MEMORY[0x10] = 15
+        // TEST 5: STORE MEMORY[0x10] = 15
         check_value(
             uut.data_memory_inst.memory[8'h10],
             8'd15,
             "CPU STORE"
         );
 
-        // TEST 5: R3 = 15
+        // TEST 6: LOAD R3 = 15
         check_value(
             uut.regfile_inst.R3,
             8'd15,
             "CPU LOAD"
         );
 
-        // TEST 6: HALTED
+        // TEST 7: HALT
         total_tests = total_tests + 1;
 
         if (halted !== 1'b1) begin
