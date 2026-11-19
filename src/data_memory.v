@@ -11,22 +11,26 @@ module data_memory (
     output wire [7:0] read_data
 );
 
+    // 256 locations, each 8 bits wide
     reg [7:0] memory [0:255];
-    integer i;
 
-    // Synchronous reset and write
+    // Tracks whether each memory location contains valid data
+    reg [255:0] valid;
+
+    // Synchronous reset and memory write
     always @(posedge clk) begin
         if (reset) begin
-            for (i = 0; i < 256; i = i + 1) begin
-                memory[i] <= 8'd0;
-            end
+            valid <= 256'b0;
         end
         else if (write_enable) begin
             memory[address] <= write_data;
+            valid[address] <= 1'b1;
         end
     end
 
-    // Asynchronous read
-    assign read_data = memory[address];
+    // Asynchronous read with valid-bit checking
+    assign read_data = valid[address]
+                     ? memory[address]
+                     : 8'd0;
 
 endmodule
