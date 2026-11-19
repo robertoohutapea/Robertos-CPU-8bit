@@ -1,3 +1,4 @@
+`ifndef SYNTHESIS
 `timescale 1ns/1ps
 
 module alu_8bit_tb;
@@ -139,3 +140,4 @@ module alu_8bit_tb;
     end
 
 endmodule
+`endif // SYNTHESIS
