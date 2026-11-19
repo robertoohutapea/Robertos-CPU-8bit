@@ -12,8 +12,8 @@ project:
   source_files:
     - "tt_um_robertoohutapea_cpu8.v"
     - "cpu_8bit.v"
-    - "alu_8bit.v"
     - "control_unit.v"
+    - "alu_8bit.v"
     - "register_file.v"
     - "program_counter.v"
     - "instruction_memory.v"
