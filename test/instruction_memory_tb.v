@@ -1,3 +1,4 @@
+`ifndef SYNTHESIS
 `timescale 1ns/1ps
 
 module instruction_memory_tb;
@@ -89,3 +90,4 @@ module instruction_memory_tb;
     end
 
 endmodule
+`endif // SYNTHESIS
