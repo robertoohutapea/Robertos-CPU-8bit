@@ -1,4 +1,4 @@
-`ifndef SYNTHESIS
+`ifdef __ICARUS__
 `timescale 1ns/1ps
 
 module cpu_8bit_tb;
@@ -137,4 +137,4 @@ module cpu_8bit_tb;
     end
 
 endmodule
-`endif // SYNTHESIS
+`endif // __ICARUS__

@@ -1,4 +1,4 @@
-`ifndef SYNTHESIS
+`ifdef __ICARUS__
 `timescale 1ns/1ps
 
 module program_counter_tb;
@@ -162,4 +162,4 @@ module program_counter_tb;
     end
 
 endmodule
-`endif // SYNTHESIS
+`endif // __ICARUS__

@@ -1,4 +1,4 @@
-`ifndef SYNTHESIS
+`ifdef __ICARUS__
 `timescale 1ns/1ps
 
 module register_file_tb;
@@ -190,4 +190,4 @@ module register_file_tb;
     end
 
 endmodule
-`endif // SYNTHESIS
+`endif // __ICARUS__

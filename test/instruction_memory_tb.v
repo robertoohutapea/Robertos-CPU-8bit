@@ -1,4 +1,4 @@
-`ifndef SYNTHESIS
+`ifdef __ICARUS__
 `timescale 1ns/1ps
 
 module instruction_memory_tb;
@@ -90,4 +90,4 @@ module instruction_memory_tb;
     end
 
 endmodule
-`endif // SYNTHESIS
+`endif // __ICARUS__

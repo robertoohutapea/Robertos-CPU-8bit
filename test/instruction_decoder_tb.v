@@ -1,4 +1,4 @@
-`ifndef SYNTHESIS
+`ifdef __ICARUS__
 `timescale 1ns/1ps
 
 module instruction_decoder_tb;
@@ -108,4 +108,4 @@ module instruction_decoder_tb;
     end
 
 endmodule
-`endif // SYNTHESIS
+`endif // __ICARUS__
