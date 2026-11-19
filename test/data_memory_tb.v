@@ -1,3 +1,4 @@
+`ifndef SYNTHESIS
 `timescale 1ns/1ps
 
 module data_memory_tb;
@@ -117,3 +118,4 @@ module data_memory_tb;
     end
 
 endmodule
+`endif // SYNTHESIS
