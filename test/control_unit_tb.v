@@ -1,4 +1,4 @@
-
+`ifndef SYNTHESIS
 `timescale 1ns/1ps
 
 module control_unit_tb;
@@ -160,3 +160,4 @@ module control_unit_tb;
     end
 
 endmodule
+`endif // SYNTHESIS
