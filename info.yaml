@@ -10,15 +10,15 @@ project:
   top_module: "tt_um_robertoohutapea_cpu8"
 
   source_files:
+    - "tt_um_robertoohutapea_cpu8.v"
+    - "cpu_8bit.v"
     - "alu_8bit.v"
+    - "control_unit.v"
     - "register_file.v"
     - "program_counter.v"
     - "instruction_memory.v"
     - "instruction_decoder.v"
-    - "control_unit.v"
     - "data_memory.v"
-    - "cpu_8bit.v"
-    - "tt_um_robertoohutapea_cpu8.v"
 
 pinout:
   ui[0]: ""
