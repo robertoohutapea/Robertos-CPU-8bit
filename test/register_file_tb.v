@@ -1,3 +1,4 @@
+`ifndef SYNTHESIS
 `timescale 1ns/1ps
 
 module register_file_tb;
@@ -189,3 +190,4 @@ module register_file_tb;
     end
 
 endmodule
+`endif // SYNTHESIS
